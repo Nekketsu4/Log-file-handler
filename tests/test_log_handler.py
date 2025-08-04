@@ -1,17 +1,22 @@
-import pytest
 import json
+
+import pytest
+
 from log_file_handler import LogHandler
 from reports import report_total
 
-testing_files = ['example1.log',]
+testing_files = [
+    "example1.log",
+]
 testing_handler = LogHandler(*testing_files)
-testing_handler.form_table('total')
+testing_handler.form_table("total")
+
 
 @pytest.fixture()
 def read_file():
     get_data = []
     for file in testing_files:
-        with open(file, 'r', encoding='utf-8') as f:
+        with open(file, "r", encoding="utf-8") as f:
             for line in f.readlines():
                 get_data.append(json.loads(line))
     return get_data
@@ -35,9 +40,15 @@ def test_add_report():
     assert isinstance(testing_handler.add_report(), dict)
     assert len(testing_handler.add_report()) == 2
 
-    '''добавили дополнительный класс в отчет'''
-    testing_handler.add_report().update({'new_total': report_total.get_report(
-        all_handlers=testing_handler.all_handlers, handlers=testing_handler.handlers)})
+    """добавили дополнительный класс в отчет"""
+    testing_handler.add_report().update(
+        {
+            "new_total": report_total.get_report(
+                all_handlers=testing_handler.all_handlers,
+                handlers=testing_handler.handlers,
+            )
+        }
+    )
 
     assert len(testing_handler.add_report()) == 3
 
